@@ -81,7 +81,7 @@ async function runScraper() {
       await page.waitForFunction(() => {
         return !document.body.innerText.includes('Verification successful') && 
                !document.body.innerText.includes('Just a moment');
-      }, { timeout: 30000 });
+      }, { timeout: 100000 });
     } catch (e) {
       console.log('Cloudflare took too long or got stuck.');
     }

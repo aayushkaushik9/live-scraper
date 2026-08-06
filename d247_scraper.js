@@ -75,8 +75,8 @@ async function runScraper() {
     // Fake user agent to look like a normal user
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36');
 
-    console.log('Navigating to https://allpanel9.global/home ...');
-    await page.goto('https://allpanel9.global/home', { waitUntil: 'networkidle2', timeout: 60000 });
+    console.log('Navigating to https://allpanel9.global ...');
+    await page.goto('https://allpanel9.global', { waitUntil: 'networkidle2', timeout: 60000 });
 
     // Check if we need to log in
     await new Promise(r => setTimeout(r, 5000));

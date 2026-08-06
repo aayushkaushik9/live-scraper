@@ -55,9 +55,7 @@ async function runScraper() {
         '--disable-dev-shm-usage',
         '--disable-accelerated-2d-canvas',
         '--disable-gpu',
-        '--single-process', // Reduces RAM overhead
-        '--disable-features=IsolateOrigins,site-per-process', // Reduces RAM
-        '--js-flags="--max-old-space-size=256"'
+        '--disable-features=IsolateOrigins,site-per-process'
       ]
     });
 

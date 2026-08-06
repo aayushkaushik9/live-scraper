@@ -69,24 +69,24 @@ async function runScraper() {
 
     const page = await browser.newPage();
     
-    // Block heavy resources (Images, CSS, Fonts) to save memory
-    await page.setRequestInterception(true);
-    page.on('request', (req) => {
-      const type = req.resourceType();
-      if (['image', 'stylesheet', 'font', 'media'].includes(type)) {
-        req.abort();
-      } else {
-        req.continue();
-      }
-    });
-
     // Fake user agent to look like a normal user
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36');
 
     console.log('Navigating to https://allpanel9.global/home ...');
     await page.goto('https://allpanel9.global/home', { waitUntil: 'networkidle2', timeout: 60000 });
-
-    // Check if we need to log in
+    
+    // Wait for Cloudflare to finish
+    console.log('Waiting for Cloudflare verification to complete...');
+    try {
+      await page.waitForFunction(() => {
+        return !document.body.innerText.includes('Verification successful') && 
+               !document.body.innerText.includes('Just a moment');
+      }, { timeout: 30000 });
+    } catch (e) {
+      console.log('Cloudflare took too long or got stuck.');
+    }
+    
+    // Extra wait to let React app mount
     await new Promise(r => setTimeout(r, 5000));
 
     console.log('Current URL:', page.url());
@@ -127,6 +127,9 @@ async function runScraper() {
           const allTextElements = document.querySelectorAll('div, span, a');
           allTextElements.forEach(el => {
             const text = (el.textContent || '').trim();
+            // Ignore Cloudflare script tags and generic text
+            if (text.includes('_cf_chl_opt') || text.includes('Verification successful')) return;
+            
             if (text.includes(' v ') || text.includes(' vs ') || text.includes(' - ')) {
               const parentRow = el.closest('.row, tr, .match-card, .event-row, li, .nav-item');
               let odds = [];

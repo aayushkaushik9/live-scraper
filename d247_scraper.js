@@ -55,7 +55,15 @@ async function runScraper() {
         '--disable-dev-shm-usage',
         '--disable-accelerated-2d-canvas',
         '--disable-gpu',
-        '--disable-features=IsolateOrigins,site-per-process'
+        '--disable-features=IsolateOrigins,site-per-process',
+        '--disable-extensions',
+        '--disable-component-extensions-with-background-pages',
+        '--disable-background-networking',
+        '--disable-sync',
+        '--mute-audio',
+        '--no-first-run',
+        '--hide-scrollbars',
+        '--disable-notifications'
       ]
     });
 
@@ -181,14 +189,11 @@ async function runScraper() {
         console.error('Error during scrape evaluation:', scrapeErr.message);
       }
 
-      // Memory management: restart browser every 60 loops (approx 5 mins)
+      // Memory management: restart browser aggressively every 10 loops (approx 1 min)
       loopCount++;
-      if (loopCount >= 60) {
-        console.log('Memory reset: closing browser and restarting process...');
+      if (loopCount >= 10) {
+        console.log('Aggressive Memory reset: closing browser and restarting process...');
         break;
-      } else if (loopCount % 10 === 0) {
-        console.log('Reloading page to clear DOM memory...');
-        await page.reload({ waitUntil: 'networkidle2', timeout: 30000 });
       }
 
       await new Promise(r => setTimeout(r, SCRAPE_INTERVAL_MS));

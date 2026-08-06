@@ -126,13 +126,13 @@ async function runScraper() {
 
           const allTextElements = document.querySelectorAll('div, span, a');
           allTextElements.forEach(el => {
-            const text = el.innerText.trim();
-            if (text.includes(' v ') || text.includes(' vs ')) {
+            const text = (el.textContent || '').trim();
+            if (text.includes(' v ') || text.includes(' vs ') || text.includes(' - ')) {
               const parentRow = el.closest('.row, tr, .match-card, .event-row, li, .nav-item');
               let odds = [];
               if (parentRow) {
-                const oddsButtons = parentRow.querySelectorAll('button, .odds-box, .rate-box, .odd-button');
-                odds = Array.from(oddsButtons).map(b => b.innerText.trim()).filter(t => t.length > 0 && !isNaN(parseFloat(t)));
+                const oddsButtons = parentRow.querySelectorAll('button, .odd, .rate, .back, .lay');
+                odds = Array.from(oddsButtons).map(b => (b.textContent || '').trim()).filter(t => t.length > 0 && !isNaN(parseFloat(t)));
               }
               
               if (odds.length < 2) {

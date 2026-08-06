@@ -1,0 +1,15 @@
+{
+  "name": "render-scraper",
+  "version": "1.0.0",
+  "description": "Background scraper for Render.com",
+  "main": "d247_scraper.js",
+  "scripts": {
+    "start": "node d247_scraper.js"
+  },
+  "dependencies": {
+    "puppeteer": "^22.0.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "node-fetch": "^2.6.7"
+  }
+}
